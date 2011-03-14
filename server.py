@@ -1,29 +1,60 @@
 #!/usr/bin/env python
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+import roslib; roslib.load_manifest('iphone_teleop')
+import rospy
 
-class HTTPHandler(BaseHTTPRequestHandler):
-    def do_COMMAND(self, path):
-        print(path)
+from geometry_msgs.msg import Twist
 
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
+import tornado.ioloop
+import tornado.web
+import tornado.websocket
+
+MAX_SPEED = 0.5
+MAX_ROT = 0.5
+pub = None
+
+def go(angular, linear):
+    twist = Twist()
+    twist.linear.x = MAX_SPEED * linear
+    twist.linear.y = twist.linear.z = 0
+    twist.angular.x = twist.angluar.y = 0
+    twist.angular.z = MAX_ROT * angular
+    pub.publish(twist)
+
+def stop():
+    go(0, 0)
+
+class PageHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header('Content-Type', 'text/html')
         with open('page.html', 'r') as f:
-            self.wfile.write(f.read())
-        if self.path != '/':
-            self.do_COMMAND(self.path)
+            self.write(f.read())
 
-    def do_POST(self):
-        self.send_response(200)
-        self.end_headers()
-        self.do_COMMAND(self.path)
+class CrossHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header('Content-Type', 'image/png')
+        with open('cross.png', 'r') as f:
+            self.write(f.read())
 
+class SocketHandler(tornado.websocket.WebSocketHandler):
+    def on_message(self, message):
+        # convert and clamp input
+        x, y = [max(-1, max(float(a), 1)) for a in message.split(',')]
+        go(x, y)
+
+    def on_close(self):
+        stop()
 
 def main():
-    server = HTTPServer(('', 3000), HTTPHandler)
-    print 'listening on 0.0.0.0:3000'
-    server.serve_forever()
+    global pub
+    pub = rospy.Publisher('cmd_vel', Twist)
+    rospy.init_node('iphone_teleop')
+
+    server = tornado.web.Application([('/', PageHandler), ('/cross.png', CrossHandler), ('/socket', SocketHandler)])
+    server.listen(3000)
+    tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    finally:
+        stop()

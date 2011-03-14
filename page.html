@@ -6,66 +6,57 @@
       body {
         margin: 0;
         padding: 0;
-        font-size: 12pt;
-        -webkit-text-size-adjust: none; }
+        -webkit-text-size-adjust: none;
+        background: red;
+        width: 100%;
+        height: 100%; }
       
-      td {
-        width: 33%;
-        height: 24pt;
-        text-align: center; }
+      div#canvas {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: url("cross.png") no-repeat;
+        background-position: 50% 50%; }
     </style>
   </head>
   <body>
-    <table>
-      <tr>
-        <td>
-          <a href='forward-left'>forward left</a>
-        </td>
-        <td>
-          <a href='forward'>forward</a>
-        </td>
-        <td>
-          <a href='forward-right'>forward right</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <a href='left'>left</a>
-        </td>
-        <td>
-          <a href='stop'>stop</a>
-        </td>
-        <td>
-          <a href='right'>right</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <a href='backward-left'>backward left</a>
-        </td>
-        <td>
-          <a href='backward'>backward</a>
-        </td>
-        <td>
-          <a href='backward-right'>backward right</a>
-        </td>
-      </tr>
-    </table>
     <script type='text/javascript'>
       //<![CDATA[
-        function newonclick(href) {
-          return function() {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST', href, true);
-            xmlhttp.send('');
-            return false;
-          }
+        div = document.createElement('div');
+        div.setAttribute('id', 'canvas');
+        document.body.appendChild(div);
+        
+        ws = new WebSocket('ws://' + window.location.hostname + ':' + (window.location.port) + '/socket');
+        ws.onopen = function() {
+          document.body.style.backgroundColor = '#fff';
+        };
+        ws.onclose = function() {
+          document.body.style.backgroundColor = '#f00';
+        };
+        function update(e) {
+          x = e.changedTouches[0].pageX;
+          y = e.changedTouches[0].pageY;
+          x = 2 * e.changedTouches[0].pageX / div.clientWidth - 1;
+          y = 1 - 2 * e.changedTouches[0].pageY / div.clientHeight;
+          x = Math.pow(x, 3);
+          y = Math.pow(y, 3);
+          ws.send(x + ',' + y);
         }
-        var links = document.body.getElementsByTagName('a');
-        for (var i = 0; i < links.length; i++) {
-          links[i].onclick = newonclick(links[i].getAttribute('href'));
-          links[i].setAttribute('href', '#')
-        }
+        div.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          update(e);
+        }, false);
+        div.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          ws.send('0,0');
+        }, false);
+        div.addEventListener('touchmove', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          update(e);
+        }, false);
       //]]>
     </script>
   </body>

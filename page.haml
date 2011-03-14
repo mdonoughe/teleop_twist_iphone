@@ -7,46 +7,50 @@
         body
           :margin 0
           :padding 0
-          :font-size 12pt
           :-webkit-text-size-adjust none
-        td
-          :width 33%
-          :height 24pt
-          :text-align center
+          :background #f00
+          :width 100%
+          :height 100%
+        div#canvas
+          :position absolute
+          :width 100%
+          :height 100%
+          :background url('cross.png') no-repeat
+          :background-position 50% 50%
   %body
-    %table
-      %tr
-        %td
-          %a(href="forward-left") forward left
-        %td
-          %a(href="forward") forward
-        %td
-          %a(href="forward-right") forward right
-      %tr
-        %td
-          %a(href="left") left
-        %td
-          %a(href="stop") stop
-        %td
-          %a(href="right") right
-      %tr
-        %td
-          %a(href="backward-left") backward left
-        %td
-          %a(href="backward") backward
-        %td
-          %a(href="backward-right") backward right
     :javascript
-      function newonclick(href) {
-        return function() {
-          var xmlhttp = new XMLHttpRequest();
-          xmlhttp.open('POST', href, true);
-          xmlhttp.send('');
-          return false;
-        }
+      div = document.createElement('div');
+      div.setAttribute('id', 'canvas');
+      document.body.appendChild(div);
+
+      ws = new WebSocket('ws://' + window.location.host + '/socket');
+      ws.onopen = function() {
+        document.body.style.backgroundColor = '#fff';
+      };
+      ws.onclose = function() {
+        document.body.style.backgroundColor = '#f00';
+      };
+      function update(e) {
+        x = e.changedTouches[0].pageX;
+        y = e.changedTouches[0].pageY;
+        x = 2 * e.changedTouches[0].pageX / div.clientWidth - 1;
+        y = 1 - 2 * e.changedTouches[0].pageY / div.clientHeight;
+        x = Math.pow(x, 3);
+        y = Math.pow(y, 3);
+        ws.send(x + ',' + y);
       }
-      var links = document.body.getElementsByTagName('a');
-      for (var i = 0; i < links.length; i++) {
-        links[i].onclick = newonclick(links[i].getAttribute('href'));
-        links[i].setAttribute('href', '#')
-      }
+      div.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        update(e);
+      }, false);
+      div.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        ws.send('0,0');
+      }, false);
+      div.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        update(e);
+      }, false);
