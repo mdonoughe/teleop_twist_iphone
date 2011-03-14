@@ -1,0 +1,52 @@
+!!! 5
+%html
+  %head
+    %meta{:name => "viewport", :content => "width=device-width, user-scalable=no"}
+    %style
+      :sass
+        body
+          :margin 0
+          :padding 0
+          :font-size 12pt
+          :-webkit-text-size-adjust none
+        td
+          :width 33%
+          :height 24pt
+          :text-align center
+  %body
+    %table
+      %tr
+        %td
+          %a(href="forward-left") forward left
+        %td
+          %a(href="forward") forward
+        %td
+          %a(href="forward-right") forward right
+      %tr
+        %td
+          %a(href="left") left
+        %td
+          %a(href="stop") stop
+        %td
+          %a(href="right") right
+      %tr
+        %td
+          %a(href="backward-left") backward left
+        %td
+          %a(href="backward") backward
+        %td
+          %a(href="backward-right") backward right
+    :javascript
+      function newonclick(href) {
+        return function() {
+          var xmlhttp = new XMLHttpRequest();
+          xmlhttp.open('POST', href, true);
+          xmlhttp.send('');
+          return false;
+        }
+      }
+      var links = document.body.getElementsByTagName('a');
+      for (var i = 0; i < links.length; i++) {
+        links[i].onclick = newonclick(links[i].getAttribute('href'));
+        links[i].setAttribute('href', '#')
+      }
