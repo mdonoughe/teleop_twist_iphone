@@ -1,0 +1,30 @@
+/**
+\mainpage
+\htmlinclude manifest.html
+
+\b teleop_twist_iphone allows you to control your robot using a touch-enabled web browser that supports websockets. Tornado is required on the computer running this node.
+
+Drag your finger up and down for forward and backward. Drag left and right to turn. Removing your finger from the screen or disconnecting should stop the robot.
+
+Be careful about driving into things. Use at your own risk, etc.
+
+<!-- 
+Provide an overview of your package.
+-->
+
+
+\section codeapi Code API
+
+<!--
+Provide links to specific auto-generated API documentation within your
+package that is of particular interest to a reader. Doxygen will
+document pretty much every part of your code, so do your best here to
+point the reader to the actual API.
+
+If your codebase is fairly large or has different sets of APIs, you
+should use the doxygen 'group' tag to keep these APIs together. For
+example, the roscpp documentation has 'libros' group.
+-->
+
+
+*/
