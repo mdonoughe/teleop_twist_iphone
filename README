@@ -1,0 +1,23 @@
+This ROS node allows you to teleoperate your robot from your iPhone/iPod/iPad.
+
+The robot node must understand Twist messages. X is forward. Rotations are done
+about the Z axis.
+
+The iPhone/iPod/iPad/other must support WebSockets and touch events. I've only
+tested this with my iPod.
+
+The computer running the node must have Tornado installed. The version in
+Ubuntu's repository is too old.
+
+Instructions:
+ * Run the node.
+
+ * Connect to http://<host>:3000/ from Safari on your iPhone. You should see a
+   white screen with a crosshair in the middle. Red indicates means that you are
+   not connected to the node.
+
+ * Carefully drag your finger around the screen. The middle of the screen is
+   (0, 0). Dragging up will cause the robot to drive forward. Down is reverse.
+   Left and right cause the robot to turn. Dragging away from the center
+   increases the speed. The maximum speeds are 0.5 and 0.5. Removing your finger
+   from the screen will cause the robot to stop.
