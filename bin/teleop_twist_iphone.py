@@ -16,7 +16,6 @@ pub = None
 
 def go(angular, linear):
     try:
-        print(angular, linear)
         twist = Twist()
         twist.linear.x = MAX_SPEED * linear
         twist.linear.y = twist.linear.z = 0
