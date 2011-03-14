@@ -1,7 +1,7 @@
 <package>
   <description brief="teleop_twist_iphone">
 
-    teleop_twist_iphone allows you to control your robot using Safari on your iPhone/iPad/iPod. This requires Tornado(newer than the version in Ubuntu) installed on the computer running the node, and iOS 4.x. It might work on other touch enabled devices that have websocket support.
+    teleop_twist_iphone allows you to control your robot using Safari on your iPhone/iPad/iPod. This requires Tornado(newer than the version in Ubuntu) installed on the computer running the node, and iOS 4.x. It might work on other touch enabled devices that have websocket support. Open http://<host>:3000/ and drag your finger around to drive.
 
   </description>
   <author>Matthew Donoughe</author>
