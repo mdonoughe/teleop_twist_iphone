@@ -12,6 +12,18 @@ Ubuntu's repository is too old.
 The maximum speed is adjustable by setting the ~maximum_linear_speed and
 ~maximum_angular_speed parameters. These default to 0.5 and 0.5.
 
+WARNING:
+I should probably warn you now that during the use of this node, you may:
+ * Bump the edge of the screen, causing the robot to rapidly accelerate,
+   throwing lose equipment off, and crashing into something.
+ * Lose your network connection is such a way that the server does not notice
+   until the connection times out, causing the robot to continue driving like
+   as it has been until it crashes into something. This could be fixed by
+   stopping the robot if no updates are received in a certain time period, and
+   having the client send periodic messages to keep the connection alive.
+This code may cause physical damage to you, your robot, your environment, etc.
+USE AT YOUR OWN RISK.
+
 Instructions:
  * Run the node.
 
