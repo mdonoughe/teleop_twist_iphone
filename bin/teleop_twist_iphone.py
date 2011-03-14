@@ -55,9 +55,11 @@ def wait_for_exit():
     tornado.ioloop.IOLoop.instance().stop()
 
 def main():
-    global pub
-    pub = rospy.Publisher('cmd_vel', Twist)
+    global pub, MAX_SPEED, MAX_ROT
     rospy.init_node('teleop_twist_iphone')
+    pub = rospy.Publisher('cmd_vel', Twist)
+    MAX_SPEED = rospy.get_param('~maximum_linear_speed', MAX_SPEED)
+    MAX_ROT = rospy.get_param('~maximum_angular_speed', MAX_ROT)
 
     server = tornado.web.Application([('/', PageHandler), ('/cross.png', CrossHandler), ('/socket', SocketHandler)])
     server.listen(3000)

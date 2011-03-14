@@ -9,6 +9,9 @@ tested this with my iPod.
 The computer running the node must have Tornado installed. The version in
 Ubuntu's repository is too old.
 
+The maximum speed is adjustable by setting the ~maximum_linear_speed and
+~maximum_angular_speed parameters. These default to 0.5 and 0.5.
+
 Instructions:
  * Run the node.
 
@@ -19,5 +22,5 @@ Instructions:
  * Carefully drag your finger around the screen. The middle of the screen is
    (0, 0). Dragging up will cause the robot to drive forward. Down is reverse.
    Left and right cause the robot to turn. Dragging away from the center
-   increases the speed. The maximum speeds are 0.5 and 0.5. Removing your finger
-   from the screen will cause the robot to stop.
+   increases the speed. Removing your finger from the screen will cause the
+   robot to stop.
