@@ -36,3 +36,17 @@ Instructions:
    Left and right cause the robot to turn. Dragging away from the center
    increases the speed. Removing your finger from the screen will cause the
    robot to stop.
+
+Ideas:
+ * Can the robot stream video to be displayed behind the crosshair?
+
+ * Should this be separated into one node that publishes touch points(maybe even
+   multitouch?) and accelerometer and gyroscope and compas and location data,
+   and another node that translates it into Twist messages? All that data is
+   available to Javascript applications since iOS 4.2. Doing so could turn your
+   iPhone into a capable sensor without jailbreaking.
+
+   My iPod only has an accelerometer and a very uncertain location guess by
+   nearby wireless networks. My robot has two accelerometers already, so there
+   isn't much of a point in adding this functionality at the moment. Maybe if I
+   get some free time I'll borrow an iPhone 3GS and publish the sensors.
