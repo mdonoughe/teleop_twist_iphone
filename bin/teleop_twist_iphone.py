@@ -11,7 +11,7 @@ import tornado.websocket
 from threading import Thread
 
 MAX_SPEED = 0.5
-MAX_ROT = 0.5
+MAX_ROT = 1.0
 pub = None
 
 def go(angular, linear):
