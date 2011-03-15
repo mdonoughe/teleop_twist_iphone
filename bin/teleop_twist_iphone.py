@@ -44,7 +44,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, message):
         # convert and clamp input
         x, y = [max(-1, min(float(a), 1)) for a in message.split(',')]
-        go(x, y)
+        go(-x, y) # use -x so the robot turns left when you move left
 
     def on_close(self):
         stop()
