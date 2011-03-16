@@ -12,6 +12,10 @@ Ubuntu's repository is too old.
 The maximum speed is adjustable by setting the ~maximum_linear_speed and
 ~maximum_angular_speed parameters. These default to 0.5 and 0.5.
 
+Setting ~rate will cause the last motion command to be republished rate times
+per second. Some robot drivers stop the robot if there aren't any more movement
+commands.
+
 WARNING:
 I should probably warn you now that during the use of this node, you may:
  * Bump the edge of the screen, causing the robot to rapidly accelerate,

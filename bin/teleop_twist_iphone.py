@@ -13,9 +13,12 @@ from threading import Thread
 MAX_SPEED = 0.5
 MAX_ROT = 1.0
 pub = None
+last_vel = (0.0, 0.0)
 
 def go(angular, linear):
+    global last_vel
     try:
+        last_vel = (angular, linear)
         twist = Twist()
         twist.linear.x = MAX_SPEED * linear
         twist.linear.y = twist.linear.z = 0
@@ -24,6 +27,9 @@ def go(angular, linear):
         pub.publish(twist)
     except Exception as e:
         print(e)
+
+def repub():
+        go(*last_vel)
 
 def stop():
     go(0, 0)
@@ -63,6 +69,9 @@ def main():
     server = tornado.web.Application([('/', PageHandler), ('/cross.png', CrossHandler), ('/socket', SocketHandler)])
     server.listen(3000)
     Thread(target = wait_for_exit).start()
+    rate = int(rospy.get_param('~rate', 0))
+    if rate != 0:
+        tornado.ioloop.PeriodicCallback(repub, 1000.0 / rate).start()
     tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == '__main__':
